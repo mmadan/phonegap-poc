@@ -9,7 +9,7 @@
     <link rel="stylesheet"  type="text/css" href="css/design.css" />
     <link rel="stylesheet" href="jquery.mobile/jquery.mobile-1.0.1.min.css" />
 	<link rel="stylesheet" href="index.css" /> 
-    <script type="text/javascript" charset="utf-8" src="cordova-2.0.0.js"></script>
+    <script type="text/javascript" charset="utf-8" src="cordova-2.1.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
    	<script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
  	<script type="text/javascript" src="http://jzaefferer.github.com/jquery-validation/jquery.validate.js"></script>
@@ -24,39 +24,123 @@
       em { font-weight: bold; padding-right: 1em; vertical-align: top; }
     </style>
     <script>
-      $(document).ready(function(){
-      $("#loginForm").validate();
-      });
+     //$(document).ready(function(){
+     //$("#loginForm").validate();
+      //});
       
+        //User Validation Check function
+        function userValidation(){
+            var user = document.getElementById("username").value;
+            var pass = document.getElementById("password").value;
+            if(user == "" && pass != "")
+            {
+                document.getElementById("errorDiv").style.display = "block";
+                document.getElementById("errorDiv").innerHTML="Username cannot be Empty!";
+            }
+            else if(user != "" && pass == ""){
+                document.getElementById("errorDiv").style.display = "block";
+                document.getElementById("errorDiv").innerHTML="Password cannot be Empty!";
+            }
+            else if(user =="" && pass ==""){
+                document.getElementById("errorDiv").style.display = "block";
+                document.getElementById("errorDiv").innerHTML="Username & Password cannot be Empty!";
+            }
+            else{
+                login(user,pass);
+            }
+        }
+        
+        //User Login Function
+		function login(user,pass)
+        {
+            var xmlDoc;
+            var xmlhttp;
+            var param = "<digikam><requesttype>LOGINCHECK</requesttype><loginvalidation><loginname>"
+            param = param + user + "</loginname><password>";
+            param = param + pass +"</password></loginvalidation></digikam>";
+            if (window.XMLHttpRequest)
+            {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp=new XMLHttpRequest();
+            }
+            else
+            {// code for IE6, IE5
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange=function()
+            {
+                if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                    xmlDoc = xmlhttp.responseXML;
+                    x=xmlDoc.getElementsByTagName("response");
+                    txt = x[0].childNodes[0].nodeValue;
+                    if(txt == 'OK')
+                    {
+                        sessionStorage.setItem('uname', user);
+                        sessionStorage.setItem('pwd', pass);
+                        document.location = "./project.html";
+                    }
+                    else
+                    {
+                        document.getElementById("errorDiv").style.display = "block";
+                        document.getElementById("errorDiv").innerHTML="Wrong Username/Password!"
+                        
+                    }
+                }
+            }
+            $('#submit').text('Loading')
+            xmlhttp.open("POST","http://14.140.201.34:8080/AppUBuild/api/apprequest",true);
+            xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xmlhttp.send(param);
+        }
+       
+        //Cordova onLoad Function
+        function onLoad() {
+            document.addEventListener("deviceready", onDeviceReady, false);
+        }
+        
+        // Cordova is loaded and it is now safe to make calls Cordova methods
+        function onDeviceReady() {
+            document.addEventListener("offline", onOffline, false);
+        }
+        
+        // Handle the offline event
+        function onOffline() {
+            document.getElementById("errorDiv").style.display = "block";
+            document.getElementById("errorDiv").innerHTML="Please connect to Internet!";
+            document.getElementById("username").disabled=true;
+            document.getElementById("password").disabled=true;
+            document.getElementById("submit").disabled=true;
+        }
     </script>
-    <title>Hello Cordova</title>
+    <title>ULC - PhoneGap</title>
   </head>
-  <body onload="init();">
+  <body onload="onLoad()">
     <div data-role="page" data-theme="i">
       <div data-role="header" data-theme="i">
         <div id="logo"></div>
       </div>
       <div data-role="content" >
+          <div id="errorDiv"></div>
         <div id="loginWidth">
           <div class="loginPage">
             <div id="header">
               <h3>Login</h3>
             </div>
-			<form action="project.html" method="post" id="loginForm">
-              <fieldset data-role="fieldcontain" >
+           <!-- <form id="loginForm"> -->
+              <fieldset data-role="fieldcontain">
               	<label for="username">Username:</label>
-         		<input type="text" name="username" id="username" value="" placeholder="Username" class=" required" />
+         		<input type="text" name="username" id="username" value="" placeholder="Username" class=" required" autocorrect="off" autocapitalize="off" />
               </fieldset>
+                
               <fieldset data-role="fieldcontain" >
               	<label for="password">Password:</label>
-                <input type="password" name="password" id="password"  placeholder="Password" class=" required"/>
+                <input type="password" name="password" id="password"  placeholder="Password"  class=" required"/>
               </fieldset >
-              <input type="submit" value="Inloggen"   id="submitButton"/>
-            </form>
+                <button id="submit" onclick="userValidation()">Inloggen</button>
+            <!-- </form> -->
           </div>
 		</div>
       </div>
     </div>
-   
   </body>
 </html>

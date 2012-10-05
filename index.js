@@ -21,62 +21,13 @@ $('#page-home').live('pageinit', function(event){
     $('.api-div').hide();
     $('.api-div#api-project').show();
     $('ul.ui-listview li').first().addClass('buttonHover');
-  
-   
-    
-    
-    $(function() {
-        var project = jQuery('#api-project');
-    	var gebouw = jQuery('#api-gebouw');
-    	 var verdieping = jQuery('#api-verdieping');
-    	 var i=0;
-        for(i=0; i<10; i++)
-    	    {
-            var projectdiv = jQuery(' <div id="div'+i+'"  data-role="button" class="textLeft ui-btn ui-shadow ui-btn-corner-all ui-btn-up-c" 				 							data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="c"><span class="ui-btn-inner 						 							ui-btn-corner-all"><span class="ui-btn-text">Project '+i+' </span></span></div>');
-    		project.append(projectdiv);
-    		
-           $('.api-div#api-project div#div'+i).click(function() {
-            $('.api-div').hide();
-            $('.api-div#api-gebouw').show();
-    		$('ul.ui-listview').find('li.ui-btn').each(function(){
-    			$(this).removeClass('buttonHover');
-    		});
-    		  $('ul.ui-listview li#gebouw').addClass('buttonHover');
-           
-        });
-        }
-    	
-    	 for(i=0; i<10; i++)
-    	    { var gebouwdiv = jQuery(' <div id="div'+i+'" data-role="button" class="textLeft ui-btn ui-shadow ui-btn-corner-all ui-btn-up-c" 				 							data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="c"><span class="ui-btn-inner 						 							ui-btn-corner-all"><span class="ui-btn-text">Building '+i+' </span></span></div>');
-    		 gebouw.append(gebouwdiv);
-    		 	
-           $('.api-div#api-gebouw div#div'+i).click(function() {
-            $('.api-div').hide();
-            $('.api-div#api-verdieping').show();
-    		$('ul.ui-listview').find('li.ui-btn').each(function(){
-    			$(this).removeClass('buttonHover');
-    		});
-    		  $('ul.ui-listview li#verdieping').addClass('buttonHover');
-           
-        });
-        }
-    	
-    	 for(i=0; i<10; i++)
-    	    {
-           var verdiepingdiv = jQuery(' <div id="div'+i+'" data-role="button" class="textLeft ui-btn ui-shadow ui-btn-corner-all ui-btn-up-c" 				 							data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="c"><span class="ui-btn-inner 						 							ui-btn-corner-all"><span class="ui-btn-text">Floor '+i+' </span></span></div>');
-    		verdieping.append(verdiepingdiv);
-        
-        }
-    	
+
+    $('#intro').click(function() {
+        $('#username').value('');
+        $('#password').value('');
+        $.mobile.silentScroll(0);            
     });
     
-    
-    
-    
-    
-    
-    
-        
     $('div ul li a').click(function(event) {
         event.preventDefault();
      
@@ -112,5 +63,3 @@ $('#page-home').live('pageinit', function(event){
         $.mobile.silentScroll(0);
     });
 });
-
-

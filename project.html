@@ -3,26 +3,83 @@
 <html>
   <head>
     <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
-    <title>KAM</title>
-    <script type="text/javascript" charset="utf-8" src="apis/contacts.js"></script>
- 
+    <title>ULC - PhoneGap</title>
+    
+     
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name = "format-detection" content = "telephone=no"/>
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width;" />
+        
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet"  type="text/css" href="css/design.css" />
+        <link rel="stylesheet" href="jquery.mobile/jquery.mobile-1.0.1.min.css" />
+        <link rel="stylesheet" href="index.css" />
+        <script type="text/javascript" charset="utf-8" src="cordova-2.1.0.js"></script>
+        <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
+        <script type="text/javascript" src="http://jzaefferer.github.com/jquery-validation/jquery.validate.js"></script>
+        <script type="text/javascript" charset="utf-8" src="index.js"></script>
+        <script type="text/javascript">
+            // Function to gather all the Project Data on the Page onload event
+            function projectData(){
+                var user = sessionStorage.getItem('uname');
+                var pass = sessionStorage.getItem('pwd');
+                var param = "<digikam><requesttype>GETPROJECTS</requesttype><loginvalidation><loginname>"
+                param = param + user + "</loginname><password>";
+                param = param + pass +"</password></loginvalidation></digikam>";
+                if (window.XMLHttpRequest)
+                {// code for IE7+, Firefox, Chrome, Opera, Safari
+                    xmlhttp=new XMLHttpRequest();
+                }
+                else
+                {// code for IE6, IE5
+                    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                xmlhttp.onreadystatechange=function()
+                {
+                    if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                    {
+                        xmlDoc = xmlhttp.responseXML;
+                        x=xmlDoc.getElementsByTagName("add");
+                        var nam,add;
+                        for (var j=0;j<=x.length;j++)
+                        {
+                                nam = x[j].getElementsByTagName("name")[0].childNodes[0].nodeValue;
+                                add= x[j].getElementsByTagName("address")[0].childNodes[0].nodeValue;
+                                $('#api-project').append('<div class="textLeft ui-btn ui-shadow ui-btn-corner-all ui-btn-up-c" data-role="button" onclick="get_contacts();" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="c"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">'+nam+'  '+add+'</span></span></div>');
+                        }
+                        
+                        
+                    }
+                }
+                xmlhttp.open("POST","http://14.140.201.34:8080/AppUBuild/api/apprequest",true);
+                xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                xmlhttp.send(param);
+            }
+            
+            //Logout Button handler Function
+            function Logout(){
+                document.location = "./index.html";
+            }
+        </script> 
   </head>
   
-  <body >
+  <body onload="projectData();">
 	<div data-role="page" id="page-home" class="type-interior" data-theme="b">
 
 	<div data-role="header" data-theme="b">
 		<h1></h1>
- 		<a href="index.html" data-icon="home" data-iconpos="notext" id="intro" class="ui-btn-right logout">logout</a>
+        <!-- Logout Button -->
+        <a data-icon="home" data-iconpos="notext" id="intro" href="#" class="ui-btn-right logout" onclick="Logout();">logout</a>
 	</div>
 
 	<div data-role="content" data-theme="c" class="contentBg">			
 		<div class="content-secondary">
 			<div  data-theme="g" data-content-theme="b">
 					<ul data-role="listview" data-theme="b" data-dividertheme="b">
-					<li id="project"><a id="click-project">Project</a></li>
-					<li id="gebouw"><a id="click-gebouw">Gebouw</a></li>
-					<li id="verdieping"><a id="click-verdieping">Verdieping</a></li>
+					<li><a id="click-project">Project</a></li>
+					<li><a id="click-gebouw">Gebouw</a></li>
+					<li><a id="click-verdieping">Verdieping</a></li>
 				</ul>
 			</div>
 		</div>
@@ -37,15 +94,23 @@
              			</form>
           			</li>
           		</ul>
-				
-			</div>
+        <!-- <div class="textLeft" data-role="button" onClick="get_contacts();">Project 1 </div> -->
+     			</div>
 
 		    <div class="api-div" id="api-gebouw">
-                
+                <div class="textLeft" data-role="button" onClick="get_contacts();">Building 1 </div>
+                <div class="textLeft" data-role="button" onClick="get_contacts();">Building 2 </div>
+                <div class="textLeft" data-role="button" onClick="get_contacts();">Building 3 </div>
+                <div class="textLeft" data-role="button" onClick="get_contacts();">Building 4 </div>
+                <div class="textLeft" data-role="button" onClick="get_contacts();">Building 5 </div>
 			</div>
 
 		    <div class="api-div" id="api-verdieping">
-				</div>
+                <div class="textLeft" data-role="button" onClick="get_contacts();">Floor 1 </div>
+                <div class="textLeft" data-role="button" onClick="get_contacts();">Floor 2 </div>
+                <div class="textLeft" data-role="button" onClick="get_contacts();">Floor 3 </div>
+				
+			</div>
 
 		    
 
